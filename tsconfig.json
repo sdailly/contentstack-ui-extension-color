@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "./types"
+    ],
+    "types": [
+      "node",
+      "webpack-env",
+      "@types/node",
+      "@types/jest",
+      "jest",
+      "jest-fetch-mock",
+      "@types/contentstack"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "@contentstack/ui-extensions-sdk/dist/ui-extension-sdk.js"
+  ]
+}
