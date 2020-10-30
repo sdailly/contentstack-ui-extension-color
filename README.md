@@ -13,7 +13,7 @@ npm install
 
 ### Compiles
 ```
-npm run build:main
+npm run build:wc
 ```
 
 ### Run tests
