@@ -1,4 +1,4 @@
-import {mount, Wrapper} from '@vue/test-utils'
+import { mount, Wrapper } from '@vue/test-utils'
 import App from "@/App.vue";
 import mockEntries from '../__mocks__/getAllPagesEntries.mock';
 
@@ -21,17 +21,18 @@ let defaultMocks = {
     window: {
       updateHeight: () => jest.fn(),
     }
-  }
+  },
+  extensionField: ({
+    setData: () => jest.fn(),
+  }),
 };
 
 describe('InputSearchUrlAutocomplete.vue', () => {
   function getWrapper(options?: any) {
-    const wrapperMounted = mount(App, {
+    return mount(App, {
       mocks: defaultMocks,
       ...options,
     });
-    // @ts-ignore
-    return wrapperMounted
   }
 
   beforeAll(() => {
@@ -55,8 +56,8 @@ describe('InputSearchUrlAutocomplete.vue', () => {
       expect(wrapper.vm.listUrl).toEqual([]);
     });
 
-    test('listUrlFiltered should be return empty array', () => {
-      expect(wrapper.vm.listUrlFiltered).toEqual([]);
+    test('listFilteredByQuery should be return empty array', () => {
+      expect(wrapper.vm.listFilteredByQuery).toEqual([]);
     });
 
     test('Autocomplete should be not visible', () => {
@@ -71,9 +72,20 @@ describe('InputSearchUrlAutocomplete.vue', () => {
   });
 
   describe('Recherche une url', () => {
-    beforeAll(() => {
+    beforeEach(() => {
+      wrapper = getWrapper();
       wrapper.vm.listUrl = wrapper.vm.contentStack.getAllPagesEntries();
     })
+    afterEach(() => {
+      wrapper.destroy();
+    })
+
+    test('focus on input, editing value should be return true', async () => {
+      const input = wrapper.find('.App_field');
+      input.trigger('focus');
+      expect(wrapper.vm.editing).toBe(true);
+    });
+
     test('When i set Promod on input, Query should be return "Promod"', async () => {
       const input = wrapper.find('.App_field');
       input.setValue('Promod');
@@ -81,43 +93,41 @@ describe('InputSearchUrlAutocomplete.vue', () => {
       expect(wrapper.vm.inputValue).toBe('Promod');
     });
 
-    test('Devrait me retourner 2 résultats contenant un P dans le titre', async () => {
-      wrapper.vm.getUrlsContentStack = jest.spyOn(wrapper.vm, 'getUrlsContentStack');
+    test('Devrait retourner 2 résultats contenant un P dans le titre', async () => {
       const input = wrapper.find('.App_field');
-      await input.trigger('input');
-      await input.setValue('Pr')
+      await input.trigger('keypress');
+      input.setValue('Promod');
       await wrapper.vm.$nextTick();
-      expect(wrapper.vm.getUrlsContentStack).toHaveBeenCalled();
-      expect(wrapper.vm.listUrlFiltered.length).toBe(2);
-      expect(wrapper.vm.listUrlFiltered[0].title).toBe('Promod');
+      expect(wrapper.vm.listFilteredByQuery.length).toBe(2);
+      expect(wrapper.vm.listFilteredByQuery[0].title).toBe('Promod');
     });
 
-    describe("Quand je sélectionne une url proposée dans l'autcompletion", () => {
-      test('Les informations sont envoyées à ContentStack', async () => {
-        wrapper = getWrapper({
-          mocks: {
-            ...defaultMocks,
-            extensionField: ({
-              setData: () => jest.fn(),
-            }),
-          },
-        });
-        wrapper.vm.listUrl = wrapper.vm.contentStack.getAllPagesEntries();
-        const input = wrapper.find('.App_field');
-        await input.trigger('input');
-        await input.setValue('Pr');
-        const itemsSuggest = wrapper.findAll('.Autocomplete_item');
-        const selectThisUrl = jest.spyOn(wrapper.vm, 'selectThisUrl');
-        const setData = jest.spyOn(wrapper.vm.extensionField, 'setData');
-        const updateHeight = jest.spyOn(wrapper.vm, 'updateHeight');
-        const secondItemSuggest = itemsSuggest.at(1);
-        await secondItemSuggest.trigger('click');
-        await wrapper.vm.$nextTick();
+    test('Devrait retourner 2 résultats contenant un p minuscule dans le titre', async () => {
+      const input = wrapper.find('.App_field');
+      await input.trigger('input');
+      await input.setValue('promo')
+      await wrapper.vm.$nextTick();
+      expect(wrapper.vm.listFilteredByQuery.length).toBe(2);
+      expect(wrapper.vm.listFilteredByQuery[0].title).toBe('Promod');
+    });
 
-        expect(selectThisUrl).toHaveBeenCalledWith(1);
-        expect(setData).toHaveBeenCalled();
-        expect(updateHeight).toHaveBeenCalled();
+    test('Les informations sont envoyées à ContentStack', async () => {
+      const input = wrapper.find('.App_field');
+      await input.trigger('focus');
+      await input.setValue('Pr');
+      const itemsSuggest = wrapper.findAll('.Autocomplete_item');
+      const selectThisUrl = jest.spyOn(wrapper.vm, 'selectThisUrl');
+      const setData = jest.spyOn(wrapper.vm.extensionField, 'setData');
+      const updateHeight = jest.spyOn(wrapper.vm, 'updateHeight');
+      const secondItemSuggest = itemsSuggest.at(1);
+      await secondItemSuggest.trigger('click');
+      await wrapper.vm.$nextTick();
+
+      expect(selectThisUrl).toHaveBeenCalledWith(1);
+      expect(setData).toHaveBeenCalledWith({
+        url: (input.element as HTMLInputElement).value,
       });
+      expect(updateHeight).toHaveBeenCalled();
     });
   });
 });

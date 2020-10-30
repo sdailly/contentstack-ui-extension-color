@@ -3,10 +3,15 @@
     <label for="input" class="App_label">Url
       <small>(with autocomplete)</small>
     </label>
-    <input ref="input" id="input" class="App_field" type="search" @input="getUrlsContentStack"
-           v-model="inputValue">
+    <input
+      @focus="editing = true"
+      ref="input"
+      id="input"
+      class="App_field"
+      type="search"
+      v-model="inputValue">
     <ul class="Autocomplete" v-if="autocompleteIsVisible">
-      <li class="Autocomplete_item" @click="selectThisUrl(index)" v-for="(entry, index) in listUrlFiltered"
+      <li class="Autocomplete_item" @click="selectThisUrl(index)" v-for="(entry, index) in listFilteredByQuery"
           :key="index">
         <div class="Autocomplete_itemTitle"><strong>{{entry.title}}</strong></div>
         <div class="Autocomplete_itemUrl">{{entry.url}}</div>
@@ -24,21 +29,19 @@
   import VueContentStack, {IContentStackOptions} from "@/plugins/VueContentStack";
   // eslint-disable-next-line no-unused-vars
   import {Region} from "contentstack";
-
   const MIN_HEIGHT_WINDOW = 135;
 
   @Component({
-    name: 'ChooseProducts'
+    name: 'input-search-url-autocomplete'
   })
   export default class App extends Vue {
-    public inputValue: string = '';
-    private editing = false;
-    private extension: any;
-    private extensionField: any;
+    public inputValue = '';
+    public editing = false;
+    public extension: any;
+    public extensionField: any;
     public contentStack: any;
     private config: any;
-    private listUrl: any[] = [];
-    private listUrlFiltered: any[] = [];
+    public listUrl: any[] = [];
 
     async mounted() {
         ContentstackUIExtension.init().then(async (extension: any) => {
@@ -59,7 +62,7 @@
     }
 
     get autocompleteIsVisible(): boolean {
-      return this.editing && this.urlExist
+      return this.editing && this.urlExist && this.inputValue !== '';
     }
 
     get showMessageWarning() {
@@ -67,32 +70,27 @@
     }
 
     get urlExist() {
+      return this.listFilteredByQuery.length > 0;
+    }
+
+    get listFilteredByQuery() {
       return this.listUrl.filter((entry: any) => {
         const regex = new RegExp(this.inputValue, 'i');
         return regex.test(entry.title) || regex.test(entry.url);
-      }).length > 0;
-    }
-
-    async getUrlsContentStack() {
-      this.listUrlFiltered = await this.listUrl.filter((entry: any) => {
-        const regex = new RegExp(this.inputValue, 'i');
-        this.editing = true;
-        return regex.test(entry.title) || regex.test(entry.url);
       });
-      this.updateHeight();
     }
 
     selectThisUrl(index: number = 0) {
-      this.inputValue = this.listUrlFiltered[index].url;
+      this.inputValue = this.listFilteredByQuery[index].url;
       this.editing = false;
       this.extensionField.setData({
         url: this.inputValue,
-      })
+      });
       this.updateHeight(MIN_HEIGHT_WINDOW);
     }
 
     updateHeight(height?: number) {
-      const autoHeight: number = (height) ? height : MIN_HEIGHT_WINDOW + (this.listUrlFiltered.length * 45);
+      const autoHeight: number = (height) ? height : MIN_HEIGHT_WINDOW + (this.listFilteredByQuery.length * 45);
       this.extension.window.updateHeight(autoHeight);
     }
   }
