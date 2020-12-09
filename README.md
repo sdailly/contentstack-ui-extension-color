@@ -1,10 +1,6 @@
-# Input Search Url Autocomplete - ContentStack Extension UI
+# Colors Input - ContentStack Extension UI
 
-Cette extension de ContentStack permet aux équipes marketing de remplir une url depuis un champ avec autocomplétion.
-
-Lorsqu'un utilisateur tape une url, une recherche est réalisée parmi toutes les pages renseignées dans ContentStack et affiche toutes les urls associées à la recherche dans l'autocompletion.
-
-![docs/extension-render.gif](docs/extension-render.gif)
+Cette extension de ContentStack permet aux équipes marketing de sélectionner une couleur parmis une liste prédéfinies
 
 ## Project setup
 ```

@@ -1,6 +1,24 @@
 module.exports = {
     moduleFileExtensions: ['ts', 'js', 'vue', 'json'],
-
+    setupFiles: [
+        "<rootDir>/jest/globals.ts"
+    ],
+    globals: {
+        ContentstackUIExtension: {
+            init: () => Promise.resolve({
+                field: {
+                    getData: () => ({
+                        colorSelected: undefined
+                    })
+                },
+                config: {
+                    colorsList: [
+                        {}
+                    ]
+                }
+            })
+        }
+    },
     transform: {
         '^.+\\.ts$': 'ts-jest',
         '^.+\\.js$': 'babel-jest',

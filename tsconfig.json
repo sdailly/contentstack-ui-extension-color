@@ -49,6 +49,7 @@
     "node_modules"
   ],
   "files": [
-    "@contentstack/ui-extensions-sdk/dist/ui-extension-sdk.js"
+    "@contentstack/ui-extensions-sdk/dist/ui-extension-sdk.js",
+    "./types/index.d.ts"
   ]
 }
