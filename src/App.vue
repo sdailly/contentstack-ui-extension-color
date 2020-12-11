@@ -30,7 +30,7 @@
     public colorsList: string[] = [];
     public config: IConfig | undefined;
     public colorSelected: string = '';
-    private extensionField: any;
+    public extensionField: any;
 
     mounted() {
       ContentstackUIExtension.init().then((extension: any) => {
