@@ -1,3 +1,5 @@
+const path = require('path')
+
 function enableShadowCss(config) {
     const configs = [
         config.module.rule('vue').use('vue-loader'),
@@ -36,5 +38,11 @@ module.exports = {
     // https://cli.vuejs.org/guide/webpack.html#chaining-advanced
     chainWebpack: config => {
         enableShadowCss(config);
+        if (process.env.MOCK) {
+            config.resolve.alias.set(
+                '@contentstack/ui-extensions-sdk/dist/ui-extension-sdk',
+                path.resolve(__dirname, `mock/contentstack-extension.ts`)
+            )
+        }
     }
 }
