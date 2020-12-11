@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build:wc": "vue-cli-service build --target wc --name input-search-url-autocomplete src/main.ts",
+    "build:wc": "vue-cli-service build --target wc --name get-color src/main.ts",
     "test:unit": "vue-cli-service test:unit",
     "test:unit:watch": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
