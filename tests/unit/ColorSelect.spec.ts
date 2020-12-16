@@ -67,8 +67,14 @@ describe('ColorSelect.vue', () => {
             setData: () => jest.fn(),
           },
           colorsList: [
-            '#ef0f0f',
-            '#52ef0f',
+            {
+              name: '',
+              value: '#ef0f0f',
+            },
+            {
+              name: '',
+              value: '#52ef0f',
+            },
           ]
         }),
       });
@@ -83,12 +89,39 @@ describe('ColorSelect.vue', () => {
             setData: () => jest.fn(),
           },
           colorsList: [
-            '#ef0f0f',
-            '#52ef0f',
+            {
+              name: '',
+              value: '#ef0f0f',
+            },
+            {
+              name: '',
+              value: '#52ef0f',
+            },
           ]
         }),
       });
       expect(wrapper.element.querySelector('.App_color')?.getAttribute('style')).toBe('background-color: rgb(239, 15, 15);');
+    });
+
+    test("Si le name exist, le texte devrait s'afficher", () => {
+      wrapper = mountWrapper({
+        data: () => ({
+          extensionField: {
+            setData: () => jest.fn(),
+          },
+          colorsList: [
+            {
+              name: '',
+              value: '#ef0f0f',
+            },
+            {
+              name: '',
+              value: '#52ef0f',
+            },
+          ]
+        }),
+      });
+      expect(wrapper.find('.App_name').exists()).toBe(true);
     });
   });
 
@@ -101,8 +134,14 @@ describe('ColorSelect.vue', () => {
             getData: () => '',
           },
           colorsList: [
-            '#ef0f0f',
-            '#52ef0f',
+            {
+              name: '',
+              value: '#ef0f0f',
+            },
+            {
+              name: '',
+              value: '#52ef0f',
+            },
           ]
         }),
       });
@@ -146,8 +185,14 @@ describe('ColorSelect.vue', () => {
             setData: jest.fn(),
           },
           colorsList: [
-            '#ef0f0f',
-            '#52ef0f',
+            {
+              name: '',
+              value: '#ef0f0f',
+            },
+            {
+              name: '',
+              value: '#52ef0f',
+            },
           ]
         }),
       });

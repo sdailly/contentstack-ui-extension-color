@@ -4,16 +4,17 @@
       your administrator</p>
     <div class="App_list" v-else>
       <label class="App_item"
-             :class="{'App_item--selected': colorSelected === color}"
-             @click="setColor(color)"
+             :class="{'App_item--selected': colorSelected === color.value}"
+             @click="setColor(color.value)"
              v-for="(color, index) in colorsList"
              :key="index">
-        <input hidden v-model="colorSelected" :value="color" type="radio" class="App_input" />
+        <input hidden v-model="colorSelected" :value="color.value" type="radio" class="App_input" />
         <span
-          :style="{'background-color': color}"
+          :style="{'background-color': color.value}"
           class="App_color">
         </span>
-        <span class="App_value" v-text="color"></span>
+        <span class="App_value" v-text="color.value"></span>
+        <span class="App_name" v-if="color.name" v-text="color.name"></span>
       </label>
     </div>
   </div>
@@ -27,9 +28,9 @@
     name: 'getColor',
   })
   export default class App extends Vue {
-    public colorsList: string[] = [];
+    public colorsList: IColor[] = [];
     public config: IConfig | undefined;
-    public colorSelected: string = '';
+    public colorSelected = '';
     public extensionField: any;
 
     mounted() {
@@ -70,7 +71,9 @@
     }
 
     &_item {
-      display: inline-block;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       cursor: pointer;
 
       &--selected {
@@ -99,9 +102,17 @@
     }
 
     &_value {
-      display: block;
       color: #748590;
       transition: color 0.25s ease;
+      font-size: .75rem;
+      text-align: center;
+    }
+
+    &_name {
+      color: #748590;
+      transition: color 0.25s ease;
+      font-size: .75rem;
+      text-align: center;
     }
   }
 </style>

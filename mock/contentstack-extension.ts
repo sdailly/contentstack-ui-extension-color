@@ -13,10 +13,14 @@ class contentstackUIExtension {
 export default new contentstackUIExtension({
   config: {
     colorsList: [
-        '#ef0f0f',
-        '#d74f4f',
-        '#0fefa1',
-        '#beef0f',
+      {
+        name: 'test',
+        value: '#ef0f0f',
+      },
+      {
+        name: '',
+        value: '#52ef0f',
+      },
     ]
   },
   field: {
