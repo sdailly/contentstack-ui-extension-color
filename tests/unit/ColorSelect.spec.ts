@@ -103,7 +103,7 @@ describe('ColorSelect.vue', () => {
       expect(wrapper.element.querySelector('.App_color')?.getAttribute('style')).toBe('background-color: rgb(239, 15, 15);');
     });
 
-    test("Si le name exist, le texte devrait s'afficher", () => {
+    test("Si la property name existe, le nom de la couleur devrait s'afficher", () => {
       wrapper = mountWrapper({
         data: () => ({
           extensionField: {
@@ -111,7 +111,7 @@ describe('ColorSelect.vue', () => {
           },
           colorsList: [
             {
-              name: '',
+              name: 'test',
               value: '#ef0f0f',
             },
             {
@@ -122,6 +122,27 @@ describe('ColorSelect.vue', () => {
         }),
       });
       expect(wrapper.find('.App_name').exists()).toBe(true);
+    });
+
+      test("Si la property name n'existe pas, le nom de la couleur ne devrait pas s'afficher", () => {
+        wrapper = mountWrapper({
+          data: () => ({
+            extensionField: {
+              setData: () => jest.fn(),
+            },
+            colorsList: [
+              {
+                name: '',
+                value: '#ef0f0f',
+              },
+              {
+                name: '',
+                value: '#52ef0f',
+              },
+            ]
+          }),
+        });
+        expect(wrapper.find('.App_name').exists()).toBe(false);
     });
   });
 

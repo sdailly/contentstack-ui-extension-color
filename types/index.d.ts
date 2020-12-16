@@ -2,6 +2,6 @@ interface IConfig {
   colorsList: IColor[]
 }
 interface IColor {
-  name: string;
+  name?: string;
   value: string;
 }
