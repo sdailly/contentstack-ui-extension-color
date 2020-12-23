@@ -2,21 +2,20 @@
   <div id="app">
     <p class="App_message App_message--warning" v-if="showMessageWarning">Colors list not be loaded ! please contact
       your administrator</p>
-    <div class="App_list" v-else>
-      <label class="App_item"
+    <ul class="App_list" v-else>
+      <li class="App_item"
              :class="{'App_item--selected': colorSelected === color.value}"
-             @click="setColor(color.value)"
+             @click.prevent="setColor(color.value)"
              v-for="(color, index) in colorsList"
              :key="index">
-        <input hidden v-model="colorSelected" :value="color.value" type="radio" class="App_input" />
         <span
           :style="{'background-color': color.value}"
           class="App_color">
         </span>
         <span class="App_value" v-text="color.value"></span>
         <span class="App_name" v-if="color.name" v-text="color.name"></span>
-      </label>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -47,8 +46,9 @@
       return !this.colorsList.length;
     }
 
-    setColor(color: any) {
-      this.extensionField.setData(color);
+    setColor(color: string) {
+      this.colorSelected = (color === this.colorSelected) ? '' : color;
+      this.extensionField.setData(this.colorSelected);
     }
   }
 </script>
@@ -64,6 +64,8 @@
     &_list {
       display: flex;
       flex-wrap: wrap;
+      padding: 0;
+      margin: 0;
 
       & > .App_item {
         margin: 0 1rem 1rem;

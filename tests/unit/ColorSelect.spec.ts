@@ -60,28 +60,6 @@ describe('ColorSelect.vue', () => {
       expect(wrapper.element.querySelectorAll('.App_item').length).toBe(5);
     });
 
-    test('la valeur des inputs devraient retourner la valeur de la couleur', () => {
-      wrapper = mountWrapper({
-        data: () => ({
-          extensionField: {
-            setData: () => jest.fn(),
-          },
-          colorsList: [
-            {
-              name: '',
-              value: '#ef0f0f',
-            },
-            {
-              name: '',
-              value: '#52ef0f',
-            },
-          ]
-        }),
-      });
-      const firstInput = wrapper.find('.App_input').attributes('value')
-      expect(firstInput).toBe('#ef0f0f');
-    });
-
     test('App_color valeur par défaut doit être vide', () => {
       wrapper = mountWrapper({
         data: () => ({
@@ -124,25 +102,25 @@ describe('ColorSelect.vue', () => {
       expect(wrapper.find('.App_name').exists()).toBe(true);
     });
 
-      test("Si la property name n'existe pas, le nom de la couleur ne devrait pas s'afficher", () => {
-        wrapper = mountWrapper({
-          data: () => ({
-            extensionField: {
-              setData: () => jest.fn(),
+    test("Si la property name n'existe pas, le nom de la couleur ne devrait pas s'afficher", () => {
+      wrapper = mountWrapper({
+        data: () => ({
+          extensionField: {
+            setData: () => jest.fn(),
+          },
+          colorsList: [
+            {
+              name: '',
+              value: '#ef0f0f',
             },
-            colorsList: [
-              {
-                name: '',
-                value: '#ef0f0f',
-              },
-              {
-                name: '',
-                value: '#52ef0f',
-              },
-            ]
-          }),
-        });
-        expect(wrapper.find('.App_name').exists()).toBe(false);
+            {
+              name: '',
+              value: '#52ef0f',
+            },
+          ]
+        }),
+      });
+      expect(wrapper.find('.App_name').exists()).toBe(false);
     });
   });
 
@@ -168,10 +146,8 @@ describe('ColorSelect.vue', () => {
       });
     })
     test('La valeur sélectionnée devrait être le rouge', async () => {
-      wrapper.vm.setColor = jest.fn();
-      const firstInput = wrapper.find('.App_item');
+      const firstInput = wrapper.findAll('.App_item').at(0);
       await firstInput.trigger('click');
-      expect(wrapper.vm.setColor).toHaveBeenCalled();
       expect(wrapper.vm.colorSelected).toBe('#ef0f0f');
     });
 
@@ -192,6 +168,13 @@ describe('ColorSelect.vue', () => {
       const firstInput = wrapper.findAll('.App_item').at(0);
       await firstInput.trigger('click');
       expect(firstInput.classes().includes('App_item--selected')).toBe(true);
+    });
+
+    test('La pastille devrait être désélectionnée après 2 click', async () => {
+      const firstInput = wrapper.findAll('.App_item').at(0);
+      await firstInput.trigger('click');
+      await firstInput.trigger('click');
+      expect(wrapper.vm.colorSelected).toBe('');
     });
   });
   describe('Retour de ContentStack', () => {

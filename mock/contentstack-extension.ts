@@ -24,7 +24,7 @@ export default new contentstackUIExtension({
     ]
   },
   field: {
-    getData: () => '#ef0f0f',
+    getData: () => '',
     setData: (obj: any) => console.log('ajout de la valeur', obj)
   }
 });
